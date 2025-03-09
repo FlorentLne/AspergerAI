@@ -1,17 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import de Flask-CORS
 import openai
 import os
 
-# Vérifier que la clé API est bien définie
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("La clé API OpenAI n'est pas définie. Ajoutez-la sur Railway.")
-
-# Initialisation du client OpenAI
-client = openai.OpenAI(api_key=api_key)
-
 # Initialisation de Flask
 app = Flask(__name__)
+CORS(app)  # 🔥 Active CORS sur toutes les routes
 
 # Configuration de l'API OpenAI
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -39,6 +33,15 @@ Chatbot : “Je comprends que ça puisse être stressant. Il ne répond plus du 
 
 # Dictionnaire pour stocker l'historique des conversations (non persistant)
 user_histories = {}
+
+# 🔹 Route OPTIONS pour éviter les erreurs CORS (pré-vérifications navigateur)
+@app.route('/chat', methods=['OPTIONS'])
+def preflight():
+    response = jsonify({"message": "Pré-vérification CORS acceptée."})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+    return response, 200
 
 @app.route('/chat', methods=['POST'])
 def chat():
