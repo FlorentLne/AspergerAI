@@ -2,6 +2,14 @@ from flask import Flask, request, jsonify
 import openai
 import os
 
+# Vérifier que la clé API est bien définie
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("La clé API OpenAI n'est pas définie. Ajoutez-la sur Railway.")
+
+# Initialisation du client OpenAI
+client = openai.OpenAI(api_key=api_key)
+
 # Initialisation de Flask
 app = Flask(__name__)
 
