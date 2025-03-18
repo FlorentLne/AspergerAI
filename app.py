@@ -69,7 +69,7 @@ def chat():
     try:
         # Envoyer l'historique à OpenAI
         response = client.chat.completions.create(
-            model="gpt-4-turbo",
+            model="gpt-4",
             messages=user_histories[user_id]
         )
 
