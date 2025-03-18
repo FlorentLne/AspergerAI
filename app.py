@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Configuration de l'API OpenAI
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Définition du system prompt
 SYSTEM_PROMPT = (
